@@ -1,10 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { IS_START_GAME } from './store/start.game.reducer';
-
-interface StartState {
-    isGameStarted: boolean;
-}
+import { StartStateInterface } from './interfaces/index';
+import { START_GAME, TITLE } from './constants/index';
 
 @Component({
     moduleId: module.id,
@@ -13,16 +10,17 @@ interface StartState {
 })
 export class AppComponent {
     private isStarted;
-    private title: string = `Tetris`;
-    private startGame: string = "Start Game";
+    private title: string = TITLE;
+    private startGame: string = START_GAME;
+    private subscribers: Array<any> = [];
 
-    constructor(private store: Store<StartState>) {
-        store.select('isGameStarted').subscribe(e => {
+    constructor(private store: Store<StartStateInterface>) {
+        this.subscribers.push(store.select('isGameStarted').subscribe(e => {
             this.isStarted = e;
-        });
+        }));
     }
 
-    buttonHandler() {
-        this.store.dispatch({ type: IS_START_GAME });
+    ngOnDestroy() {
+        this.subscribers.forEach(e => e.unsubscribe());
     }
 }

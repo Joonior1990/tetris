@@ -1,15 +1,11 @@
-import {ComponentFixture, TestBed, async} from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA }          from '@angular/core';
-import {By} from '@angular/platform-browser';
-import {DebugElement} from '@angular/core';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { GameFildComponent } from './gameFieldComponent/game.field.component';
-
-// import { IS_START_GAME } from './store/start.game.reducer';
-
-interface StartState {
-    isGameStarted: boolean;
-}
+import { StartStateInterface } from './interfaces/game.start.reducer.interface';
+import { START_GAME, TITLE } from './constants/index';
 
 import { AppComponent } from './app.component';
 
@@ -17,12 +13,8 @@ let appComp: AppComponent;
 let fixture: ComponentFixture<AppComponent>;
 let de: DebugElement;
 let title: HTMLElement;
-let button: HTMLElement;
 
 describe('AppComponent', () => {
-    // initialize variables
-    let expectTitle: string = 'Tetris';
-
     beforeEach( async(() => {
         let isStarted: boolean = false;
 
@@ -47,11 +39,9 @@ describe('AppComponent', () => {
         // query for the title <h1> by CSS element selector
         de = fixture.debugElement.query(By.css('h1'));
         title = de.nativeElement;
-
-        button = fixture.debugElement.query(By.css('button')).nativeElement;
     });
 
     it(`should has h1 element with title "Tetris"`, () => {
-        expect(title.innerHTML).toEqual(expectTitle);
+        expect(title.innerHTML).toEqual(TITLE);
     });
 });

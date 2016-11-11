@@ -1,6 +1,5 @@
 import { ActionReducer, Action } from '@ngrx/store';
-
-export const IS_START_GAME = "IS_START_GAME";
+import { IS_START_GAME } from '../constants/index';
 
 export const startGameReducer: ActionReducer<boolean> = (state: boolean = false, action: Action) => {
     switch (action.type) {
