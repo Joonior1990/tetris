@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 @Component({
+    moduleId: module.id,
     selector: 'my-app',
-    template: `
-        <h1 (click)="titleHandler(titleInput.value)">{{title}}</h1>
-        <input #titleInput (keypress)="inputPressHandler($event, titleInput.value)">
-    `
+    templateUrl: './app.component.template.html'
 })
 export class AppComponent {
     private title: string = `Tetris`;

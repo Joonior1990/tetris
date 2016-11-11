@@ -1,1 +1,2 @@
-<h1>My app</h1>
+<h1 (click)="titleHandler(titleInput.value)">{{title}}</h1>
+<input #titleInput (keypress)="inputPressHandler($event, titleInput.value)">
