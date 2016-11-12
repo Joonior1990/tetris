@@ -1,1 +1,1 @@
-export const IS_START_GAME = "IS_START_GAME";
+export const IS_START_GAME = `IS_START_GAME`;

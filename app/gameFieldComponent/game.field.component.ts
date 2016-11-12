@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { StartStateInterface } from '../interfaces/index';
-import { END_GAME, ROW_COUNT, COL_COUNT } from '../constants/index';
+import { END_GAME, ROW_COUNT, COL_COUNT, GAME_OVER } from '../constants/index';
 
 @Component({
     moduleId: module.id,
@@ -12,9 +12,9 @@ export class GameFildComponent {
     private isStarted;
     private endGame: string = END_GAME;
     private subscribers: Array<any> = [];
+    private gameField: Array<Array<boolean>> = this.createArrayWithElements(ROW_COUNT, COL_COUNT);
 
-    private rowCollection: Array<{}> = this.createArrayWithElements(ROW_COUNT);
-    private colCollection: Array<{}> = this.createArrayWithElements(COL_COUNT);
+    private temporaryStartPoint = {x: 0, y: 0};
 
     constructor(private store: Store<StartStateInterface>) {
         this.subscribers.push(store.select('isGameStarted').subscribe(e => {
@@ -22,42 +22,41 @@ export class GameFildComponent {
         }));
     }
 
-    createArrayWithElements(countOfElements) {
-        return new Array(countOfElements).fill('').map((e) => false);
+    createArrayWithElements(countOfRow, countOfCol) {
+        return new Array(countOfRow).fill('').map(e => new Array(countOfCol).fill('').map(e => false));
     }
 
-    initFigure(index) {
-        this.rowCollection[index] = true;
-        this.colCollection[index] = true;
+    initFigure(gameField: Array<Array<boolean>>, cellOfField: {x:number, y:number}) {
+        gameField[cellOfField.y][cellOfField.x] = true;
 
-        this.moveDown(index, 100, this.rowCollection.length - 1);
+        this.moveDown(gameField, cellOfField, 100);
     }
 
-    moveDown(index, speedOfMovement, lastIndex) {
+    moveDown(gameField, cellOfField, speedOfMovement) {
         setTimeout(() => {
-            this.rowCollection[index] = false;
-            this.rowCollection[++index] = true;
+            gameField[cellOfField.y][cellOfField.x] = false;
+            gameField[++cellOfField.y][cellOfField.x] = true;
 
-            if (index < lastIndex && this.isNextFieldEmpty(this.rowCollection, index)) {
-                this.moveDown(index, speedOfMovement, lastIndex);
+            if (cellOfField.y < gameField.length - 1 && this.isNextFieldEmpty(gameField, cellOfField)) {
+                this.moveDown(gameField, cellOfField, speedOfMovement);
             } else {
-                if (index > 1) {
-                    this.initFigure(0);
+                if (cellOfField.y > 1) {
+                    this.initFigure(gameField, Object.create(this.temporaryStartPoint));
                 } else {
-                    alert(`Game over!`);
+                    alert(GAME_OVER);
                 }
             }
         }, speedOfMovement);
     }
 
-    isNextFieldEmpty(rowCollection, index) {
-        if (!rowCollection[index + 1]) {
+    isNextFieldEmpty(gameField, cellOfField) {
+        if (!gameField[cellOfField.y + 1][cellOfField.x]) {
             return true;
         }
     }
 
     ngOnInit() {
-        this.initFigure(0);
+        this.initFigure(this.gameField, Object.create(this.temporaryStartPoint));
     }
 
     ngOnDestroy() {
