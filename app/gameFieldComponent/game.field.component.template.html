@@ -1,5 +1,4 @@
-<div class="rowCollection" *ngFor="let row of rowCollection">
-    <!--{{row.rowId}} | {{col.colId}}-->
-    <div class="colCollection" *ngFor="let col of colCollection"></div>
+<div class="rowCollection" *ngFor="let row of rowCollection" [class.rowFigure]="row">
+    <div class="colCollection" *ngFor="let col of colCollection" [class.colFigure]="col"></div>
 </div>
 <button-component *ngIf="isStarted" [title]="endGame"></button-component>
