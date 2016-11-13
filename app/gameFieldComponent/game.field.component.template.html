@@ -1,4 +1,4 @@
-<div class="rowCollection" *ngFor="let row of gameField">
+<div class="rowCollection" *ngFor="let row of field.gameField">
     <div class="colCollection" *ngFor="let col of row" [class.colWithFigure]="col"></div>
 </div>
 <button-component *ngIf="isStarted" [title]="endGame"></button-component>

@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { StartStateInterface } from '../interfaces/index';
-import { END_GAME, ROW_COUNT, COL_COUNT, GAME_OVER, TEMPRORARY_START_POINT } from '../constants/index';
+import { END_GAME, ROW_COUNT, COL_COUNT, GAME_OVER, INIT_GAME, TEMPRORARY_START_POINT } from '../constants/index';
 
-import { figureService, gameFieldService } from '../services/index';
+import { figureService } from '../services/index';
 
 @Component({
     moduleId: module.id,
@@ -12,20 +12,32 @@ import { figureService, gameFieldService } from '../services/index';
 })
 export class GameFildComponent {
     constructor(private store: Store<StartStateInterface>,
-                private gameFieldService: gameFieldService,
                 private figureService: figureService) {
+
+        this.store.dispatch({ type: INIT_GAME });
+
         this.subscribers.push(store.select('isGameStarted').subscribe(e => {
             this.isStarted = e;
         }));
+
+        this.subscribers.push(this.store.select('gameFieldReducer').subscribe(e => {
+            this.field = e;
+        }));
+
+        document.addEventListener("keydown", this.figureService.moveHorisontal.bind(this.figureService, this.field.gameField,  this.field.gameFigure));
+        // document.onkeydown = this.figureService.moveHorisontal.bind(null, this.temroraryStartPoint, this.gameField);
     }
 
     private isStarted;
+    private field;
+
     private endGame: string = END_GAME;
     private subscribers: Array<any> = [];
-    private gameField: Array<Array<boolean>> = this.gameFieldService.createArrayWithElements(ROW_COUNT, COL_COUNT);
 
- ngOnInit() {
-        this.figureService.initFigure(this.gameField, Object.create(TEMPRORARY_START_POINT));
+    private temroraryStartPoint = TEMPRORARY_START_POINT;
+
+    ngOnInit() {
+        this.figureService.initFigure(this.field.gameField, this.field.gameFigure);
     }
 
     ngOnDestroy() {

@@ -9,16 +9,16 @@ import { START_GAME, TITLE } from './constants/index';
     templateUrl: './app.component.template.html'
 })
 export class AppComponent {
-    private isStarted;
-    private title: string = TITLE;
-    private startGame: string = START_GAME;
-    private subscribers: Array<any> = [];
-
     constructor(private store: Store<StartStateInterface>) {
         this.subscribers.push(store.select('isGameStarted').subscribe(e => {
             this.isStarted = e;
         }));
     }
+
+    private isStarted;
+    private title: string = TITLE;
+    private startGame: string = START_GAME;
+    private subscribers: Array<any> = [];
 
     ngOnDestroy() {
         this.subscribers.forEach(e => e.unsubscribe());
