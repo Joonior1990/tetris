@@ -1,0 +1,1 @@
+export const TEMPRORARY_START_POINT = {x: 0, y: 0};;
