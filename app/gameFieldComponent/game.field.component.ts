@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { StartStateInterface } from '../interfaces/index';
-import { END_GAME, ROW_COUNT, COL_COUNT, GAME_OVER, INIT_GAME, TEMPRORARY_START_POINT } from '../constants/index';
+import { END_GAME, INIT_GAME, TEMPRORARY_START_POINT } from '../constants/index';
 
 import { figureService } from '../services/index';
 
@@ -24,7 +24,7 @@ export class GameFildComponent {
             this.field = e;
         }));
 
-        document.addEventListener("keydown", this.figureService.moveHorisontal.bind(this.figureService, this.field.gameField,  this.field.gameFigure));
+        document.addEventListener("keydown", this.figureService.moveHorisontal.bind(this.figureService));
         // document.onkeydown = this.figureService.moveHorisontal.bind(null, this.temroraryStartPoint, this.gameField);
     }
 

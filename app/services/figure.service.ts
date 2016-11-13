@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { GAME_OVER, MOVE_DOWN, INIT_NEW_FIGURE, START_SPEED } from '../constants/index';
+import { GAME_OVER, MOVE_DOWN, INIT_NEW_FIGURE, START_SPEED, MOVE_LEFT, MOVE_RIGHT } from '../constants/index';
 import { StartStateInterface } from '../interfaces/index';
 
 @Injectable()
@@ -51,29 +51,18 @@ export class figureService {
         }
     }
 
-    moveHorisontal(gameField, cellOfField, e) {
-        if (this.isStarted) {
+    moveHorisontal(e) {
+        if (!this.isStarted) {
             return;
         }
 
-        // switch (e.code) {
-        //     case 'ArrowRight':
-        //         if (cellOfField.x === 19) {
-        //             break;
-        //         }
-        //
-        //         gameField[cellOfField.y][cellOfField.x] = false;
-        //         gameField[cellOfField.y][++cellOfField.x] = true;
-        //
-        //         break;
-        //     case 'ArrowLeft':
-        //         if (cellOfField.x === 0) {
-        //             break;
-        //         }
-        //
-        //         gameField[cellOfField.y][cellOfField.x] = false;
-        //         gameField[cellOfField.y][--cellOfField.x] = true;
-        //         break;
-            // }
+        switch (e.code) {
+            case 'ArrowRight':
+                this.store.dispatch({ type: MOVE_RIGHT });
+                break;
+            case 'ArrowLeft':
+                this.store.dispatch({ type: MOVE_LEFT });
+                break;
+        }
     }
 }
