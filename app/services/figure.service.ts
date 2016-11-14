@@ -30,9 +30,8 @@ export class figureService {
                 return;
             }
 
-            this.store.dispatch({ type: MOVE_DOWN });
-
             if (cellOfField.y < gameField.length - 1 && this.isNextFieldEmpty(gameField, cellOfField)) {
+                this.store.dispatch({ type: MOVE_DOWN });
                 this.moveDown(gameField, cellOfField, speedOfMovement);
             } else {
                 if (cellOfField.y > 1) {
