@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { GAME_OVER, MOVE_DOWN, INIT_NEW_FIGURE, START_SPEED, MOVE_LEFT, MOVE_RIGHT } from '../constants/index';
+import { GAME_OVER, MOVE_DOWN, INIT_NEW_FIGURE, START_SPEED, MOVE_LEFT, MOVE_RIGHT, ROTATE_FIGURE, MOVE_BOTTOM } from '../constants/index';
 import { StartStateInterface } from '../interfaces/index';
 
 @Injectable()
@@ -38,6 +38,7 @@ export class figureService {
                     this.store.dispatch({ type: INIT_NEW_FIGURE });
                     this.initFigure(this.field.gameField, this.field.gameFigure);
                 } else {
+                    // TODO create popup with the message
                     alert(GAME_OVER);
                 }
             }
@@ -50,7 +51,7 @@ export class figureService {
         }
     }
 
-    moveHorisontal(e) {
+    keyboardHandler(e) {
         if (!this.isStarted) {
             return;
         }
@@ -61,6 +62,12 @@ export class figureService {
                 break;
             case 'ArrowLeft':
                 this.store.dispatch({ type: MOVE_LEFT });
+                break;
+            case 'ArrowDown':
+                this.store.dispatch({ type: MOVE_BOTTOM } );
+                break;
+            case 'Space':
+                this.store.dispatch({ type: ROTATE_FIGURE} );
                 break;
         }
     }
