@@ -24,8 +24,8 @@ export class GameFildComponent {
             this.field = e;
         }));
 
-        document.addEventListener("keydown", this.figureService.moveHorisontal.bind(this.figureService));
-        // document.onkeydown = this.figureService.moveHorisontal.bind(null, this.temroraryStartPoint, this.gameField);
+        document.addEventListener("keydown", this.figureService.keyboardHandler.bind(this.figureService));
+        // document.onkeydown = this.figureService.keyboardHandler.bind(null, this.temroraryStartPoint, this.gameField);
     }
 
     private isStarted;

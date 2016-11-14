@@ -4,3 +4,7 @@ export const MOVE_DOWN = `MOVE_DOWN`;
 export const INIT_NEW_FIGURE = `INIT_NEW_FIGURE`;
 export const MOVE_LEFT = `MOVE_LEFT`;
 export const MOVE_RIGHT = `MOVE_RIGHT`;
+export const ROTATE_FIGURE = `ROTATE_FIGURE`;
+export const MOVE_BOTTOM = `MOVE_BOTTOM`;
+export const FIELD_NAME = `gameField`;
+export const FIGURE_NAME = `gameFigure`;
