@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { StartStateInterface } from '../interfaces/index';
-import { END_GAME, INIT_GAME, TEMPRORARY_START_POINT } from '../constants/index';
+import { END_GAME, INIT_GAME_OR_FIGURE, START_SPEED, CLEAR_FIELD } from '../constants/index';
 
 import { figureService } from '../services/index';
 
@@ -14,8 +14,6 @@ export class GameFildComponent {
     constructor(private store: Store<StartStateInterface>,
                 private figureService: figureService) {
 
-        this.store.dispatch({ type: INIT_GAME });
-
         this.subscribers.push(store.select('isGameStarted').subscribe(e => {
             this.isStarted = e;
         }));
@@ -25,7 +23,6 @@ export class GameFildComponent {
         }));
 
         document.addEventListener("keydown", this.figureService.keyboardHandler.bind(this.figureService));
-        // document.onkeydown = this.figureService.keyboardHandler.bind(null, this.temroraryStartPoint, this.gameField);
     }
 
     private isStarted;
@@ -34,10 +31,10 @@ export class GameFildComponent {
     private endGame: string = END_GAME;
     private subscribers: Array<any> = [];
 
-    private temroraryStartPoint = TEMPRORARY_START_POINT;
-
     ngOnInit() {
-        this.figureService.initFigure(this.field.gameField, this.field.gameFigure);
+        this.store.dispatch({ type: CLEAR_FIELD });
+        this.store.dispatch({ type: INIT_GAME_OR_FIGURE });
+        this.figureService.moveDown(START_SPEED);
     }
 
     ngOnDestroy() {

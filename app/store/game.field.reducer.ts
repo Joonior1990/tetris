@@ -1,6 +1,6 @@
 import { ActionReducer, Action } from '@ngrx/store';
 import { gameFieldService } from '../services/index';
-import { INIT_GAME, MOVE_DOWN, ROW_COUNT, COL_COUNT, INIT_NEW_FIGURE, MOVE_RIGHT, MOVE_LEFT, TEMPRORARY_START_POINT, RIGHT_LIMIT, LEFT_LIMIT, MOVE_BOTTOM, FIELD_NAME, FIGURE_NAME, BASE_FIGURE_PROPERTY, LIST_OF_FIGURES } from '../constants/index';
+import { CLEAR_FIELD, INIT_GAME_OR_FIGURE, MOVE_DOWN, ROW_COUNT, COL_COUNT, MOVE_RIGHT, MOVE_LEFT, RIGHT_LIMIT, LEFT_LIMIT, MOVE_BOTTOM, FIELD_NAME, FIGURE_NAME, BASE_FIGURE_PROPERTY, LIST_OF_FIGURES } from '../constants/index';
 
 const gameFS = new gameFieldService();
 
@@ -9,14 +9,13 @@ export const gameFieldReducer: ActionReducer<any> = (state = {}, action: Action)
     let figure = getPropertyFromState(state, FIGURE_NAME);
 
     switch (action.type) {
-        case INIT_GAME:
+        case CLEAR_FIELD:
+            return {};
+        case INIT_GAME_OR_FIGURE:
             figure = getRandomFigure(BASE_FIGURE_PROPERTY, LIST_OF_FIGURES);
-
             return initNewFigureOnTheField(field, figure, FIELD_NAME, FIGURE_NAME, gameFS);
         case MOVE_DOWN:
-            return moveDown(state);
-        case INIT_NEW_FIGURE:
-            return initNewFigureOnTheField(field, figure, FIELD_NAME, FIGURE_NAME, null);
+            return moveDown(field, figure, FIELD_NAME, FIGURE_NAME);
         case MOVE_LEFT:
             return moveHorisontal(field, figure, FIELD_NAME, FIGURE_NAME, false);
         case MOVE_RIGHT:
@@ -29,19 +28,19 @@ export const gameFieldReducer: ActionReducer<any> = (state = {}, action: Action)
 }
 
 function randomInteger(min, max) {
-    var rand = min + Math.random() * (max - min)
+    let rand = min + Math.random() * (max - min);
     rand = Math.round(rand);
     return rand;
 }
 
 function getRandomFigure(baseFigure, listOfFigures) {
-    let newFigure = Object.assign({}, baseFigure);
-
     // TODO change to full length of figures's list
     let typeOfFigure = listOfFigures[randomInteger(0, 0)];
+    let newFigure = baseFigure;
 
-    newFigure.coords = Object.assign({}, typeOfFigure);
+    newFigure.coords = typeOfFigure;
     newFigure.currentState = newFigure.states[randomInteger(0, newFigure.states.length - 1)];
+    newFigure.middlePoint.y = 0;
 
     return newFigure;
 }
@@ -59,27 +58,32 @@ function getPropertyFromState(state, property) {
     return state[property];
 }
 
-function moveDown(state) {
-    let field = state.gameField;
-    let figure = state.gameFigure;
+function moveDown(field, figure, fieldNameProperty, figureNameProperty) {
+    let pointsToRender = gameFS.getPointsToRender(figure);
+    pointsToRender.forEach(e => field[e.y][e.x] = false);
 
-    field[figure.y][figure.x] = false;
-    field[++figure.y][figure.x] = true;
+    figure.middlePoint.y++;
+    field = initFigurePositionOntheField(field, figure, gameFS);
 
-    return {
-        gameField: field,
-        gameFigure: figure
-    };
+    return combineStateProperty(field, figure, fieldNameProperty, figureNameProperty);
 }
 
 function initNewFigureOnTheField(field, figure, fieldNameProperty, figureNameProperty, gameFS) {
     if (!field) {
-        field = gameFS.createArrayWithElements(ROW_COUNT, COL_COUNT);
+        field = initFigurePositionOntheField(gameFS.createArrayWithElements(ROW_COUNT, COL_COUNT), figure, gameFS);
     } else {
-        field[figure.y][figure.x] = true;
+        figure = getRandomFigure(BASE_FIGURE_PROPERTY, LIST_OF_FIGURES);
+        field = initFigurePositionOntheField(field, figure, gameFS);
     }
 
-    return combineStateProperty(field, Object.assign({}, TEMPRORARY_START_POINT), fieldNameProperty, figureNameProperty);
+    return combineStateProperty(field, figure, fieldNameProperty, figureNameProperty);
+}
+
+function initFigurePositionOntheField(field, figure, gameFS) {
+    let pointsToRender = gameFS.getPointsToRender(figure);
+    pointsToRender.forEach(point => field[point.y][point.x] = true);
+
+    return field;
 }
 
 function moveHorisontal(field, figure, fieldNameProperty, figureNameProperty, isRight) {

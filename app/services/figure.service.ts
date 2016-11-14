@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { GAME_OVER, MOVE_DOWN, INIT_NEW_FIGURE, START_SPEED, MOVE_LEFT, MOVE_RIGHT, ROTATE_FIGURE, MOVE_BOTTOM } from '../constants/index';
+import { INIT_GAME_OR_FIGURE, GAME_OVER, MOVE_DOWN, START_SPEED, MOVE_LEFT, MOVE_RIGHT, ROTATE_FIGURE, MOVE_BOTTOM } from '../constants/index';
 import { StartStateInterface } from '../interfaces/index';
+import { gameFieldService } from './game.field.service';
 
 @Injectable()
 export class figureService {
-    constructor(private store: Store<StartStateInterface>) {
+    constructor(private store: Store<StartStateInterface>,
+                private gameFS: gameFieldService) {
+
         this.store.select('isGameStarted').subscribe(e => {
             this.isStarted = e;
         });
@@ -18,37 +21,53 @@ export class figureService {
     private isStarted;
     private field;
 
-    initFigure(gameField, cellOfField) {
-        gameField[cellOfField.y][cellOfField.x] = true;
+    isCanToMoveDown(field, figure, maxValue) {
+        let pointsToRender = this.gameFS.getPointsToRender(figure).sort((a,b) => b.y - a.y);
+        let xCoords = pointsToRender.map(e => e.x);
+        let yCoords = pointsToRender.map(e => e.y);
 
-        this.moveDown(gameField, cellOfField, START_SPEED);
+        let bottomPointsOfFigure = [];
+
+        xCoords.forEach((e, index) => {
+            addElementToArray(e, index, xCoords.lastIndexOf(e));
+        });
+
+        function addElementToArray(xCoord, index, lastIndex) {
+            if (index === lastIndex) {
+                bottomPointsOfFigure.push({
+                    x: xCoord,
+                    y: yCoords[index]
+                });
+            } else {
+                xCoords.splice(lastIndex, 1);
+                yCoords.splice(lastIndex, 1);
+                addElementToArray(xCoord, index, xCoords.lastIndexOf(xCoord));
+            }
+        }
+
+        return bottomPointsOfFigure.every(e => e.y < maxValue && !field[e.y + 1][e.x])
     }
 
-    moveDown(gameField, cellOfField, speedOfMovement) {
+    moveDown(speedOfMovement) {
         setTimeout(() => {
             if (!this.isStarted) {
                 return;
             }
 
-            if (cellOfField.y < gameField.length - 1 && this.isNextFieldEmpty(gameField, cellOfField)) {
+            if (this.isCanToMoveDown(this.field.gameField, this.field.gameFigure, this.field.gameField.length - 1)) {
                 this.store.dispatch({ type: MOVE_DOWN });
-                this.moveDown(gameField, cellOfField, speedOfMovement);
+                this.moveDown(speedOfMovement);
             } else {
-                if (cellOfField.y > 1) {
-                    this.store.dispatch({ type: INIT_NEW_FIGURE });
-                    this.initFigure(this.field.gameField, this.field.gameFigure);
+                // TODO change condition to lenght current figure
+                if (this.field.gameFigure.middlePoint.y > 1) {
+                    this.moveDown(speedOfMovement);
+                    this.store.dispatch({ type: INIT_GAME_OR_FIGURE });
                 } else {
                     // TODO create popup with the message
                     alert(GAME_OVER);
                 }
             }
         }, speedOfMovement);
-    }
-
-    isNextFieldEmpty(gameField, cellOfField) {
-        if (!gameField[cellOfField.y + 1][cellOfField.x]) {
-            return true;
-        }
     }
 
     keyboardHandler(e) {
@@ -58,10 +77,10 @@ export class figureService {
 
         switch (e.code) {
             case 'ArrowRight':
-                this.store.dispatch({ type: MOVE_RIGHT });
+                this.store.dispatch({ type: MOVE_RIGHT } );
                 break;
             case 'ArrowLeft':
-                this.store.dispatch({ type: MOVE_LEFT });
+                this.store.dispatch({ type: MOVE_LEFT } );
                 break;
             case 'ArrowDown':
                 this.store.dispatch({ type: MOVE_BOTTOM } );
