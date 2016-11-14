@@ -1,6 +1,6 @@
 import { ActionReducer, Action } from '@ngrx/store';
 import { gameFieldService } from '../services/index';
-import { INIT_GAME, MOVE_DOWN, ROW_COUNT, COL_COUNT, INIT_NEW_FIGURE, MOVE_RIGHT, MOVE_LEFT, TEMPRORARY_START_POINT, RIGHT_LIMIT, LEFT_LIMIT, MOVE_BOTTOM, FIELD_NAME, FIGURE_NAME } from '../constants/index';
+import { INIT_GAME, MOVE_DOWN, ROW_COUNT, COL_COUNT, INIT_NEW_FIGURE, MOVE_RIGHT, MOVE_LEFT, TEMPRORARY_START_POINT, RIGHT_LIMIT, LEFT_LIMIT, MOVE_BOTTOM, FIELD_NAME, FIGURE_NAME, BASE_FIGURE_PROPERTY, LIST_OF_FIGURES } from '../constants/index';
 
 const gameFS = new gameFieldService();
 
@@ -10,6 +10,8 @@ export const gameFieldReducer: ActionReducer<any> = (state = {}, action: Action)
 
     switch (action.type) {
         case INIT_GAME:
+            figure = getRandomFigure(BASE_FIGURE_PROPERTY, LIST_OF_FIGURES);
+
             return initNewFigureOnTheField(field, figure, FIELD_NAME, FIGURE_NAME, gameFS);
         case MOVE_DOWN:
             return moveDown(state);
@@ -24,6 +26,24 @@ export const gameFieldReducer: ActionReducer<any> = (state = {}, action: Action)
         default:
             return state;
     }
+}
+
+function randomInteger(min, max) {
+    var rand = min + Math.random() * (max - min)
+    rand = Math.round(rand);
+    return rand;
+}
+
+function getRandomFigure(baseFigure, listOfFigures) {
+    let newFigure = Object.assign({}, baseFigure);
+
+    // TODO change to full length of figures's list
+    let typeOfFigure = listOfFigures[randomInteger(0, 0)];
+
+    newFigure.coords = Object.assign({}, typeOfFigure);
+    newFigure.currentState = newFigure.states[randomInteger(0, newFigure.states.length - 1)];
+
+    return newFigure;
 }
 
 function combineStateProperty(field, figure, fieldNameProperty, figureNameProperty) {
