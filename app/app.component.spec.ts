@@ -3,7 +3,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { GameFildComponent } from './gameFieldComponent/game.field.component';
+import { GameComponent } from './gameFieldComponent/game.component';
 import { StartStateInterface } from './interfaces/game.start.reducer.interface';
 import { START_GAME, TITLE } from './constants/index';
 
@@ -24,7 +24,7 @@ describe('AppComponent', () => {
         };
 
         TestBed.configureTestingModule({
-            declarations: [ AppComponent, GameFildComponent ], // declare the test component
+            declarations: [ AppComponent, GameComponent ], // declare the test component
             providers: [{provide: Store, useValue: StoreMock}],
             schemas:      [ NO_ERRORS_SCHEMA ]
         }).compileComponents();

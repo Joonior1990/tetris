@@ -6,13 +6,13 @@ import { startGameReducer, gameFieldReducer } from './store/index';
 
 // main component
 import { AppComponent }   from './app.component';
-import { GameFildComponent } from './gameFieldComponent/game.field.component';
+import { GameComponent } from './gameFieldComponent/game.component';
 
 // common Components
 import { ButtonComponent } from './commonComponent/buttonComponent/button.component';
 
 // service
-import { figureService, gameFieldService } from './services/index';
+import { gameService, helperService } from './services/index';
 
 @NgModule({
     imports:      [
@@ -28,12 +28,12 @@ import { figureService, gameFieldService } from './services/index';
     )],
     declarations: [
         AppComponent,
-        GameFildComponent,
+        GameComponent,
         ButtonComponent
     ],
     providers: [
-        figureService,
-        gameFieldService
+        gameService,
+        helperService
     ],
     bootstrap: [ AppComponent ]
 })

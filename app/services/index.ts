@@ -1,2 +1,2 @@
-export * from './game.field.service';
-export * from './figure.service';
+export * from './helper.service';
+export * from './game.service';

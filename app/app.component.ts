@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { StartStateInterface } from './interfaces/index';
-import { START_GAME, TITLE } from './constants/index';
+import { START_GAME_MESSAGE, TITLE } from './constants/index';
 
 @Component({
     moduleId: module.id,
@@ -17,7 +17,7 @@ export class AppComponent {
 
     private isStarted;
     private title: string = TITLE;
-    private startGame: string = START_GAME;
+    private startGame: string = START_GAME_MESSAGE;
     private subscribers: Array<any> = [];
 
     ngOnDestroy() {
