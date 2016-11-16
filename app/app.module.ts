@@ -2,7 +2,7 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { StoreModule } from '@ngrx/store';
-import { startGameReducer, gameFieldReducer } from './store/index';
+import { startGameReducer, gameReducer } from './store/index';
 
 // main component
 import { AppComponent }   from './app.component';
@@ -19,11 +19,11 @@ import { gameService, helperService } from './services/index';
         BrowserModule,
         StoreModule.provideStore({
             isGameStarted: startGameReducer,
-            gameFieldReducer: gameFieldReducer
+            gameReducer: gameReducer
         },
         {
             isGameStarted: false,
-            gameFieldReducer: {}
+            gameReducer: {}
         }
     )],
     declarations: [

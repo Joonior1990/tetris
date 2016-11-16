@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ROW_COUNT, COL_COUNT, START_X_COORD, START_Y_COORD } from "../constants/grid.constants";
-import {LIST_OF_FIGURES, LIST_VIEWS, CHECK_NEXT} from '../constants/figure.constants';
+import { LIST_OF_FIGURES, LIST_VIEWS, CHECK_NEXT, CHECK_LEFT } from '../constants/figure.constants';
 
 @Injectable()
 export class helperService {
@@ -8,7 +8,8 @@ export class helperService {
         let gameObject = {
             field: this.createEmptyField(ROW_COUNT, COL_COUNT),
             figure: this.createNewFigure(),
-            isMoveNext: true
+            isMoveNext: true,
+            isFieldUpdate: true
         };
 
         return gameObject;
@@ -54,16 +55,38 @@ export class helperService {
     moveDown(state) {
         let figure = state.figure;
         let field = state.field;
+        let coordsToCheck = figure.coordsToCheck[figure.currentView][CHECK_NEXT];
 
-        this.renderCoordsInView(figure.coords).forEach(e => field[e.y][e.x] = true );
-
-        state.isMoveNext = this.checkNextStep(field, figure.coords, figure.coordsToCheck[figure.currentView][CHECK_NEXT]);
+        state.isMoveNext = this.checkNextStep(field, figure.coords, coordsToCheck);
 
         if (state.isMoveNext) {
+            this.clearCurrent(state);
+
             figure.mainPoint.y++;
             figure.coords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
+
+            this.renderCoordsInView(figure.coords).forEach(e => field[e.y][e.x] = true );
         }
 
+        return state;
+    }
+
+    moveLeft(state) {
+        let figure = state.figure;
+        let field = state.field;
+        let coordsToCheck = figure.coordsToCheck[figure.currentView][CHECK_LEFT];
+
+        if (coordsToCheck.every(i => figure.coords[i].y < 0 || figure.coords[i].x > 0 && !field[figure.coords[i].y][figure.coords[i].x - 1])) {
+
+            this.clearCurrent(state);
+
+            figure.mainPoint.x--;
+            figure.coords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
+
+            this.renderCoordsInView(figure.coords).forEach(e => field[e.y][e.x] = true );
+        }
+
+        state.isFieldUpdate = true;
         return state;
     }
 
@@ -72,7 +95,7 @@ export class helperService {
     }
 
     clearCurrent(state) {
-        this.renderCoordsInView(state.figure.coords).forEach(e => e.y > 0 ? state.field[e.y - 1][e.x] = false: '');
+        this.renderCoordsInView(state.figure.coords).forEach(e => state.field[e.y][e.x] = false);
 
         return state;
     }

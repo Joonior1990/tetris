@@ -12,7 +12,7 @@ export class gameService {
             this.isStarted = e;
         });
 
-        this.store.select('gameFieldReducer').subscribe(e => {
+        this.store.select('gameReducer').subscribe(e => {
             this.gameData = e;
         });
     }
@@ -31,7 +31,6 @@ export class gameService {
             this.store.dispatch({ type: MOVE_DOWN });
             setTimeout(() => {
                 if (this.gameData.isMoveNext) {
-                    this.store.dispatch({ type: CLEAR_FIGURE_POSITION });
                     this.moveDown();
                 } else {
                     // TODO change condition to right check
@@ -47,23 +46,21 @@ export class gameService {
     }
 
     keyboardHandler(e) {
-        if (!this.isStarted) {
-            return;
-        }
-
-        switch (e.code) {
-            case 'ArrowRight':
-                this.store.dispatch({ type: MOVE_RIGHT } );
-                break;
-            case 'ArrowLeft':
-                this.store.dispatch({ type: MOVE_LEFT } );
-                break;
-            case 'ArrowDown':
-                this.store.dispatch({ type: MOVE_BOTTOM } );
-                break;
-            case 'Space':
-                this.store.dispatch({ type: ROTATE_FIGURE} );
-                break;
+        if (this.isStarted && this.gameData.isFieldUpdate) {
+            switch (e.code) {
+                case 'ArrowRight':
+                    this.store.dispatch({ type: MOVE_RIGHT } );
+                    break;
+                case 'ArrowLeft':
+                    this.store.dispatch({ type: MOVE_LEFT } );
+                    break;
+                case 'ArrowDown':
+                    this.store.dispatch({ type: MOVE_BOTTOM } );
+                    break;
+                case 'Space':
+                    this.store.dispatch({ type: ROTATE_FIGURE} );
+                    break;
+            }
         }
     }
 }

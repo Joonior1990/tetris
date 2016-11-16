@@ -18,15 +18,17 @@ export class GameComponent {
             this.isStarted = e;
         }));
 
-        this.subscribers.push(this.store.select('gameFieldReducer').subscribe(e => {
+        this.subscribers.push(this.store.select('gameReducer').subscribe(e => {
             this.field = e;
         }));
 
-        document.addEventListener("keydown", this.gameService.keyboardHandler.bind(this.gameService));
+        this.bindKeyboardHandler = this.gameService.keyboardHandler.bind(this.gameService);
+        document.addEventListener("keydown", this.bindKeyboardHandler);
     }
 
     private isStarted;
     private field;
+    private bindKeyboardHandler;
 
     private endGame: string = END_GAME;
     private subscribers: Array<any> = [];
@@ -37,5 +39,6 @@ export class GameComponent {
 
     ngOnDestroy() {
         this.subscribers.forEach(e => e.unsubscribe());
+        document.removeEventListener("keydown", this.bindKeyboardHandler);
     }
 }

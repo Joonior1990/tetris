@@ -3,7 +3,7 @@ export const ROW_COUNT = 20;
 export const COL_COUNT = 10;
 
 // default game's speed
-export const START_SPEED = 100;
+export const START_SPEED = 300;
 
 // field limit/block constants
 export const LEFT_TOP_LIMIT = 0;
@@ -16,5 +16,5 @@ export const LEFT_OFFSET = -1;
 
 // start coordinats of figure
 export const START_X_COORD = 5;
-export const START_Y_COORD = 0;
+export const START_Y_COORD = -1;
 
