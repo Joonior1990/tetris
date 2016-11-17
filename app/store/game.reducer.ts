@@ -1,6 +1,7 @@
 import { ActionReducer, Action } from '@ngrx/store';
 import { INIT_FIELD, CREATE_NEW_FIGURE, START_GAME, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_BOTTOM, ROTATE_FIGURE, CHECK_LEFT, CHECK_RIGHT } from '../constants/index';
 import { helperService } from '../services/helper.service';
+import {CHECK_NEXT} from "../constants/figure.constants";
 
 let helper = new helperService();
 
@@ -14,11 +15,11 @@ export const gameReducer: ActionReducer<any> = (state = {}, action: Action) => {
         case START_GAME:
             return state;
         case MOVE_DOWN:
-            return helper.moveDown(state);
+            return Object.assign({}, helper.moveHandler(state, CHECK_NEXT));
         case MOVE_LEFT:
-            return Object.assign({}, helper.moveHorisontal(state, CHECK_LEFT));
+            return Object.assign({}, helper.moveHandler(state, CHECK_LEFT));
         case MOVE_RIGHT:
-            return Object.assign({}, helper.moveHorisontal(state, CHECK_RIGHT));
+            return Object.assign({}, helper.moveHandler(state, CHECK_RIGHT));
         case MOVE_BOTTOM:
             return state;
         case ROTATE_FIGURE:
