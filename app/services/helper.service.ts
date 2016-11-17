@@ -74,14 +74,16 @@ export class helperService {
     moveLeft(state) {
         let figure = state.figure;
         let field = state.field;
-        let coordsToCheck = figure.coordsToCheck[figure.currentView][CHECK_LEFT];
 
-        if (coordsToCheck.every(i => figure.coords[i].y < 0 || figure.coords[i].x > 0 && !field[figure.coords[i].y][figure.coords[i].x - 1])) {
+        let coordsToCheck = figure.coordsToCheck[figure.currentView][CHECK_LEFT];
+        let coords = state.figure.coords;
+
+        if (coordsToCheck.every(i => coords[i].y < 0 || coords[i].x > 0 && !field[coords[i].y][coords[i].x - 1])) {
 
             this.clearCurrent(state);
 
             figure.mainPoint.x--;
-            figure.coords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
+            state.figure.coords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
 
             this.renderCoordsInView(figure.coords).forEach(e => field[e.y][e.x] = true );
         }
