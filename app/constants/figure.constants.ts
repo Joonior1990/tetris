@@ -53,5 +53,6 @@ const FIGURE_TYPE_I = {
 export const CHECK_NEXT = `nextStep`;
 export const CHECK_LEFT = `moveLeft`;
 export const CHECK_RIGHT = `moveRight`;
+export const CHECK_BOTTOM = `CHECK_BOTTOM`;
 export const LIST_OF_FIGURES = [FIGURE_TYPE_I];
 export const LIST_VIEWS = [`STATE_0`, `STATE_1`, `STATE_2`, `STATE_3`];

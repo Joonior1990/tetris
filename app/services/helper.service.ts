@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ROW_COUNT, COL_COUNT, START_X_COORD, START_Y_COORD, RIGHT_OFFSET, LEFT_OFFSET, RIGHT_LIMIT, LEFT_TOP_LIMIT } from "../constants/grid.constants";
-import { LIST_OF_FIGURES, LIST_VIEWS, CHECK_NEXT, CHECK_LEFT, CHECK_RIGHT } from '../constants/figure.constants';
+import { LIST_OF_FIGURES, LIST_VIEWS, CHECK_NEXT, CHECK_LEFT, CHECK_RIGHT, CHECK_BOTTOM } from '../constants/figure.constants';
 
 @Injectable()
 export class helperService {
@@ -56,7 +56,9 @@ export class helperService {
         let figure = state.figure;
         let field = state.field;
 
-        let coordsToCheck = figure.coordsToCheck[figure.currentView][action];
+        let coordsToCheck = action === CHECK_BOTTOM
+            ? figure.coordsToCheck[figure.currentView][CHECK_NEXT]
+            : figure.coordsToCheck[figure.currentView][action];
         let coords = state.figure.coords;
 
         let isActionPossible;
@@ -66,6 +68,18 @@ export class helperService {
             case CHECK_NEXT:
                 state.isMoveNext = this.checkNextStep(field, figure.coords, coordsToCheck);
                 isActionPossible = state.isMoveNext;
+                break;
+            case CHECK_BOTTOM:
+                state.isMoveNext = false;
+                let _currentView = figure.views[figure.currentView];
+                let _coords = this.getCoords(figure.mainPoint, _currentView);
+
+                isActionPossible = this.checkNextStep(field, _coords, coordsToCheck);
+
+                while (this.checkNextStep(field, _coords, coordsToCheck)) {
+                    figure.mainPoint.y++;
+                    _coords = this.getCoords(figure.mainPoint, _currentView);
+                }
                 break;
             case CHECK_LEFT:
                 isActionPossible = coordsToCheck.every(i => coords[i].y < LEFT_TOP_LIMIT || coords[i].x > LEFT_TOP_LIMIT && !field[coords[i].y][coords[i].x + LEFT_OFFSET]);
@@ -78,10 +92,14 @@ export class helperService {
         if (isActionPossible) {
             this.clearCurrent(state);
 
-            if (action === CHECK_NEXT) {
-                figure.mainPoint.y++;
-            } else {
-                figure.mainPoint.x += changeCurrentPositionX;
+            switch (action) {
+                case CHECK_NEXT:
+                    figure.mainPoint.y++;
+                    break;
+                case CHECK_LEFT:
+                case CHECK_RIGHT:
+                    figure.mainPoint.x += changeCurrentPositionX;
+                    break;
             }
 
             state.figure.coords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
