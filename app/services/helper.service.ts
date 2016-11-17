@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ROW_COUNT, COL_COUNT, START_X_COORD, START_Y_COORD } from "../constants/grid.constants";
 import { LIST_OF_FIGURES, LIST_VIEWS, CHECK_NEXT, CHECK_LEFT, CHECK_RIGHT } from '../constants/figure.constants';
+import {MOVE_LEFT, MOVE_RIGHT} from "../constants/reducer.constants";
 
 @Injectable()
 export class helperService {
@@ -71,39 +72,29 @@ export class helperService {
         return state;
     }
 
-    moveLeft(state) {
+    moveHorisontal(state, action) {
         let figure = state.figure;
         let field = state.field;
 
-        let coordsToCheck = figure.coordsToCheck[figure.currentView][CHECK_LEFT];
+        let coordsToCheck = figure.coordsToCheck[figure.currentView][action];
         let coords = state.figure.coords;
 
-        if (coordsToCheck.every(i => coords[i].y < 0 || coords[i].x > 0 && !field[coords[i].y][coords[i].x - 1])) {
+        let isActionPossible;
+        let changeCurrentPositionX = action === CHECK_LEFT ? -1: 1;
 
-            this.clearCurrent(state);
-
-            figure.mainPoint.x--;
-            state.figure.coords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
-
-            this.renderCoordsInView(figure.coords).forEach(e => field[e.y][e.x] = true );
+        switch (action) {
+            case CHECK_LEFT:
+                isActionPossible = coordsToCheck.every(i => coords[i].y < 0 || coords[i].x > 0 && !field[coords[i].y][coords[i].x - 1]);
+                break;
+            case CHECK_RIGHT:
+                isActionPossible = coordsToCheck.every(i => coords[i].y < 0 || coords[i].x < 9 && !field[coords[i].y][coords[i].x + 1]);
+                break;
         }
 
-        state.isFieldUpdate = true;
-        return state;
-    }
-
-    moveRight(state) {
-        let figure = state.figure;
-        let field = state.field;
-
-        let coordsToCheck = figure.coordsToCheck[figure.currentView][CHECK_RIGHT];
-        let coords = state.figure.coords;
-
-        if (coordsToCheck.every(i => coords[i].y < 0 || coords[i].x < 9 && !field[coords[i].y][coords[i].x + 1])) {
-
+        if (isActionPossible) {
             this.clearCurrent(state);
 
-            figure.mainPoint.x++;
+            figure.mainPoint.x += changeCurrentPositionX;
             state.figure.coords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
 
             this.renderCoordsInView(figure.coords).forEach(e => field[e.y][e.x] = true );
