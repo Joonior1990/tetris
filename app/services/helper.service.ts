@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ROW_COUNT, COL_COUNT, START_X_COORD, START_Y_COORD } from "../constants/grid.constants";
+import { ROW_COUNT, COL_COUNT, START_X_COORD, START_Y_COORD, RIGHT_OFFSET, LEFT_OFFSET, RIGHT_LIMIT, LEFT_TOP_LIMIT } from "../constants/grid.constants";
 import { LIST_OF_FIGURES, LIST_VIEWS, CHECK_NEXT, CHECK_LEFT, CHECK_RIGHT } from '../constants/figure.constants';
-import {MOVE_LEFT, MOVE_RIGHT} from "../constants/reducer.constants";
 
 @Injectable()
 export class helperService {
@@ -53,26 +52,7 @@ export class helperService {
         return rand;
     }
 
-    moveDown(state) {
-        let figure = state.figure;
-        let field = state.field;
-        let coordsToCheck = figure.coordsToCheck[figure.currentView][CHECK_NEXT];
-
-        state.isMoveNext = this.checkNextStep(field, figure.coords, coordsToCheck);
-
-        if (state.isMoveNext) {
-            this.clearCurrent(state);
-
-            figure.mainPoint.y++;
-            figure.coords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
-
-            this.renderCoordsInView(figure.coords).forEach(e => field[e.y][e.x] = true );
-        }
-
-        return state;
-    }
-
-    moveHorisontal(state, action) {
+    moveHandler(state, action) {
         let figure = state.figure;
         let field = state.field;
 
@@ -80,23 +60,31 @@ export class helperService {
         let coords = state.figure.coords;
 
         let isActionPossible;
-        let changeCurrentPositionX = action === CHECK_LEFT ? -1: 1;
+        let changeCurrentPositionX = (action === CHECK_LEFT) ? LEFT_OFFSET: RIGHT_OFFSET;
 
         switch (action) {
+            case CHECK_NEXT:
+                state.isMoveNext = this.checkNextStep(field, figure.coords, coordsToCheck);
+                isActionPossible = state.isMoveNext;
+                break;
             case CHECK_LEFT:
-                isActionPossible = coordsToCheck.every(i => coords[i].y < 0 || coords[i].x > 0 && !field[coords[i].y][coords[i].x - 1]);
+                isActionPossible = coordsToCheck.every(i => coords[i].y < LEFT_TOP_LIMIT || coords[i].x > LEFT_TOP_LIMIT && !field[coords[i].y][coords[i].x + LEFT_OFFSET]);
                 break;
             case CHECK_RIGHT:
-                isActionPossible = coordsToCheck.every(i => coords[i].y < 0 || coords[i].x < 9 && !field[coords[i].y][coords[i].x + 1]);
+                isActionPossible = coordsToCheck.every(i => coords[i].y < LEFT_TOP_LIMIT || coords[i].x < RIGHT_LIMIT && !field[coords[i].y][coords[i].x + RIGHT_OFFSET]);
                 break;
         }
 
         if (isActionPossible) {
             this.clearCurrent(state);
 
-            figure.mainPoint.x += changeCurrentPositionX;
-            state.figure.coords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
+            if (action === CHECK_NEXT) {
+                figure.mainPoint.y++;
+            } else {
+                figure.mainPoint.x += changeCurrentPositionX;
+            }
 
+            state.figure.coords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
             this.renderCoordsInView(figure.coords).forEach(e => field[e.y][e.x] = true );
         }
 
