@@ -19,8 +19,23 @@ export class helperService {
         return new Array(countOfRow).fill('').map(e => new Array(countOfCol).fill('').map(e => false));
     }
 
-    createNewFigure() {
+    clearFullRows(field) {
+        let newField = field.slice();
+        let startIndex = ROW_COUNT - 1;
 
+        do {
+            if (newField[startIndex].every(e => e)) {
+                newField.splice(startIndex, 1);
+                newField.unshift(new Array(COL_COUNT).fill('').map(e => false));
+            } else {
+                startIndex--;
+            }
+        } while (startIndex);
+
+        return newField;
+    }
+
+    createNewFigure() {
         let typeOfFigure = LIST_OF_FIGURES[this.randomInteger(0, LIST_OF_FIGURES.length - 1)];
         let currentView = LIST_VIEWS[this.randomInteger(0, LIST_VIEWS.length - 1)];
         let mainPoint = {x: START_X_COORD, y: START_Y_COORD};
@@ -104,6 +119,10 @@ export class helperService {
 
             state.figure.coords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
             this.renderCoordsInView(figure.coords).forEach(e => field[e.y][e.x] = true );
+        }
+
+        if (!state.isMoveNext) {
+            state.field = this.clearFullRows(field);
         }
 
         state.isFieldUpdate = true;
