@@ -23,7 +23,7 @@ export const gameReducer: ActionReducer<any> = (state = {}, action: Action) => {
         case MOVE_BOTTOM:
             return Object.assign({}, helper.moveHandler(state, CHECK_BOTTOM));
         case ROTATE_FIGURE:
-            return state;
+            return Object.assign({}, helper.rotateFigure(state));
         default:
             return state;
     }

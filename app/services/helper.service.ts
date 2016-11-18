@@ -110,6 +110,34 @@ export class helperService {
         return state;
     }
 
+    rotateFigure(state) {
+        let figure = state.figure;
+        let field = state.field;
+        let indexCurrentView = +figure.currentView.split('_')[1];
+        let nextView = indexCurrentView  === LIST_VIEWS.length - 1 ? LIST_VIEWS[0]: LIST_VIEWS[indexCurrentView + 1];
+
+        let currentFigureCoords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
+        let nextFigureCoords = this.getCoords(figure.mainPoint, figure.views[nextView]);
+
+        // c ~ currentFigureCoords;
+        let c = this.renderCoordsInView(currentFigureCoords);
+        let renderNextCoordsInView = this.renderCoordsInView(nextFigureCoords);
+
+        // n ~ nextFigureCoords;
+        let isRotatePossible = renderNextCoordsInView.every((n, i) => n.x >= 0 && n.x < 10 && (c.some(e => e.x === n.x && e.y === n.y) || !field[n.y][n.x]));
+
+        if (isRotatePossible && state.isMoveNext) {
+            this.clearCurrent(state);
+            figure.currentView = nextView;
+
+            state.figure.coords = this.getCoords(figure.mainPoint, figure.views[figure.currentView]);
+            this.renderCoordsInView(figure.coords).forEach(e => field[e.y][e.x] = true );
+        }
+
+        state.isFieldUpdate = true;
+        return state;
+    }
+
     checkNextStep(field, coords, coordsToCheck) {
         return coordsToCheck.every(i => coords[i].y < 19 && !field[coords[i].y + 1][coords[i].x]);
     }

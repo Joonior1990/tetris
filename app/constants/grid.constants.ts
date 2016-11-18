@@ -3,7 +3,7 @@ export const ROW_COUNT = 20;
 export const COL_COUNT = 10;
 
 // default game's speed
-export const START_SPEED = 100;
+export const START_SPEED = 1000;
 
 // field limit/block constants
 export const LEFT_TOP_LIMIT = 0;
