@@ -158,7 +158,7 @@ export class helperService {
     }
 
     checkNextStep(field, coords, coordsToCheck) {
-        return coordsToCheck.every(i => coords[i].y < 19 && !field[coords[i].y + 1][coords[i].x]);
+        return coordsToCheck.every(i => coords[i].y < -1 || coords[i].y < 19 && !field[coords[i].y + 1][coords[i].x]);
     }
 
     clearCurrent(state) {
