@@ -18,4 +18,4 @@ export const LEFT_OFFSET = -1;
 export const START_X_COORD = 5;
 export const START_Y_COORD = 0; // change start Y coord by figure
 
-export const MULTIPLIER = 1000;
+export const MULTIPLIER = 10;

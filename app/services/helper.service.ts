@@ -46,6 +46,9 @@ export class helperService {
         // count exp
         if (count) {
             exp.exp += exp.expByCountsOfRows[count] * exp.multiplier;
+            if (exp.exp >= exp.range[exp.level] * Math.pow(exp.multiplier, 2)) {
+                exp.level++;
+            }
         }
 
         return [newField, exp];
