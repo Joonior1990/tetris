@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ROW_COUNT, COL_COUNT, START_X_COORD, START_Y_COORD, RIGHT_OFFSET, LEFT_OFFSET, RIGHT_LIMIT, LEFT_TOP_LIMIT } from "../constants/grid.constants";
+import { ROW_COUNT, COL_COUNT, START_X_COORD, START_Y_COORD, RIGHT_OFFSET, LEFT_OFFSET, RIGHT_LIMIT, LEFT_TOP_LIMIT, MULTIPLIER } from "../constants/grid.constants";
 import { LIST_OF_FIGURES, LIST_VIEWS, CHECK_NEXT, CHECK_LEFT, CHECK_RIGHT, CHECK_BOTTOM } from '../constants/figure.constants';
 
 @Injectable()
@@ -9,7 +9,15 @@ export class helperService {
             field: this.createEmptyField(ROW_COUNT, COL_COUNT),
             figure: this.createNewFigure(),
             isMoveNext: true,
-            isFieldUpdate: true
+            isFieldUpdate: true,
+            exp: {
+                level: 1,
+                exp: 0,
+                range: [0, 1, 2, 3, 6, 10, 15, 21, 28, 36],
+                multiplier: MULTIPLIER,
+                expByCountsOfRows: [0, 1, 2.4, 4, 6]
+            }
+
         };
 
         return gameObject;
@@ -19,20 +27,28 @@ export class helperService {
         return new Array(countOfRow).fill('').map(e => new Array(countOfCol).fill('').map(e => false));
     }
 
-    clearFullRows(field) {
+    clearFullRowsCntrolResults(field, exp) {
         let newField = field.slice();
         let startIndex = ROW_COUNT - 1;
+
+        let count = 0;
 
         do {
             if (newField[startIndex].every(e => e)) {
                 newField.splice(startIndex, 1);
                 newField.unshift(new Array(COL_COUNT).fill('').map(e => false));
+                count++;
             } else {
                 startIndex--;
             }
         } while (startIndex);
 
-        return newField;
+        // count exp
+        if (count) {
+            exp.exp += exp.expByCountsOfRows[count] * exp.multiplier;
+        }
+
+        return [newField, exp];
     }
 
     createNewFigure() {
@@ -70,6 +86,7 @@ export class helperService {
     moveHandler(state, action) {
         let figure = state.figure;
         let field = state.field;
+        let exp = state.exp;
 
         let coordsToCheck = action === CHECK_BOTTOM
             ? figure.coordsToCheck[figure.currentView][CHECK_NEXT]
@@ -122,7 +139,7 @@ export class helperService {
         }
 
         if (!state.isMoveNext) {
-            state.field = this.clearFullRows(field);
+            [state.field, state.exp] = this.clearFullRowsCntrolResults(field, exp);
         }
 
         state.isFieldUpdate = true;
