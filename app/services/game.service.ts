@@ -20,6 +20,15 @@ export class gameService {
     private isStarted;
     private gameData;
 
+    compliteFieldWithNextFigure(nextFigure, startPosition, countOfRow, countOfCol) {
+        let nextFigureField = new Array(countOfRow).fill('').map(e => new Array(countOfCol).fill('').map(e => false));
+        let _nextFigure = nextFigure.map(e => ({x: startPosition.x + e.x, y: startPosition.y + e.y}));
+
+        _nextFigure.map(e => nextFigureField[e.y][e.x] = true);
+
+        return nextFigureField;
+    }
+
     startGame() {
         this.store.dispatch({ type: INIT_FIELD });
         this.moveDown();
@@ -27,7 +36,6 @@ export class gameService {
 
     moveDown() {
         if (this.isStarted) {
-
             this.store.dispatch({ type: MOVE_DOWN });
             setTimeout(() => {
                 if (this.gameData.isMoveNext) {
@@ -41,7 +49,7 @@ export class gameService {
                         alert(GAME_OVER);
                     }
                 }
-            }, START_SPEED)
+            }, this.gameData.speed)
         }
     }
 

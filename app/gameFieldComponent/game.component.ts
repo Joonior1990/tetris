@@ -19,7 +19,11 @@ export class GameComponent {
         }));
 
         this.subscribers.push(this.store.select('gameReducer').subscribe(e => {
-            this.field = e;
+            this.gameStore = e;
+
+            if (this.gameStore.figure) {
+                this.nextFigureField = this.gameService.compliteFieldWithNextFigure(this.gameStore.figure.viewNextFigure, {x: 2, y: 3}, 4, 4);
+            }
         }));
 
         this.bindKeyboardHandler = this.gameService.keyboardHandler.bind(this.gameService);
@@ -27,7 +31,8 @@ export class GameComponent {
     }
 
     private isStarted;
-    private field;
+    private gameStore;
+    private nextFigureField;
     private bindKeyboardHandler;
 
     private endGame: string = END_GAME;

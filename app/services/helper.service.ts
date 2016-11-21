@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ROW_COUNT, COL_COUNT, START_X_COORD, START_Y_COORD, RIGHT_OFFSET, LEFT_OFFSET, RIGHT_LIMIT, LEFT_TOP_LIMIT, MULTIPLIER } from "../constants/grid.constants";
+import { ROW_COUNT, COL_COUNT, START_X_COORD, START_Y_COORD, RIGHT_OFFSET, LEFT_OFFSET, RIGHT_LIMIT, LEFT_TOP_LIMIT, MULTIPLIER, START_SPEED, K_SPEED } from "../constants/grid.constants";
 import { LIST_OF_FIGURES, LIST_VIEWS, CHECK_NEXT, CHECK_LEFT, CHECK_RIGHT, CHECK_BOTTOM } from '../constants/figure.constants';
 
 @Injectable()
@@ -16,7 +16,8 @@ export class helperService {
                 range: [0, 1, 2, 3, 6, 10, 15, 21, 28, 36],
                 multiplier: MULTIPLIER,
                 expByCountsOfRows: [0, 1, 2.4, 4, 6]
-            }
+            },
+            speed: START_SPEED
 
         };
 
@@ -161,6 +162,7 @@ export class helperService {
 
         if (!state.isMoveNext || state.isMoveNext && action === CHECK_BOTTOM) {
             [state.field, state.exp] = this.clearFullRowsCntrolResults(field, exp);
+            state.speed = START_SPEED - K_SPEED * state.exp.level;
         }
 
         state.isFieldUpdate = true;

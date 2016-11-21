@@ -10,7 +10,7 @@ export const gameReducer: ActionReducer<any> = (state = {}, action: Action) => {
         case INIT_FIELD:
             return helper.initGame();
         case CREATE_NEW_FIGURE:
-            state.figure = helper.createNewFigure();
+            state.figure = helper.createNewFigure(state);
             return state;
         case START_GAME:
             return state;

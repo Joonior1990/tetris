@@ -1,5 +1,9 @@
-<div class="rowCollection" *ngFor="let row of field.field">
+<div class="rowCollection" *ngFor="let row of gameStore.field">
     <div class="colCollection" *ngFor="let col of row" [class.colWithFigure]="col"></div>
 </div>
 <button-component *ngIf="isStarted" [title]="endGame"></button-component>
-{{field.exp.exp}} || {{field.exp.level}}
+{{gameStore.exp.exp}} || {{gameStore.exp.level}}<br/>
+
+<div class="rowCollectionNext" *ngFor="let row of nextFigureField">
+    <div class="colCollectionNext" *ngFor="let col of row" [class.colWithFigure]="col"></div>
+</div>
