@@ -7,7 +7,7 @@ export class helperService {
     initGame() {
         let gameObject = {
             field: this.createEmptyField(ROW_COUNT, COL_COUNT),
-            figure: this.createNewFigure(),
+            figure: this.createNewFigure({}),
             isMoveNext: true,
             isFieldUpdate: true,
             exp: {
@@ -54,10 +54,20 @@ export class helperService {
         return [newField, exp];
     }
 
-    createNewFigure() {
-        let typeOfFigure = LIST_OF_FIGURES[this.randomInteger(0, LIST_OF_FIGURES.length - 1)];
-        let currentView = LIST_VIEWS[this.randomInteger(0, LIST_VIEWS.length - 1)];
+    createNewFigure(state) {
+        let typeOfFigure = state && state.figure
+            ? state.figure.nextTypeOfFigure
+            : LIST_OF_FIGURES[this.randomInteger(0, LIST_OF_FIGURES.length - 1)];
+
+        let currentView = state && state.figure
+            ? state.figure.nextView
+            : LIST_VIEWS[this.randomInteger(0, LIST_VIEWS.length - 1)];
+
+        let nextTypeOfFigure = LIST_OF_FIGURES[this.randomInteger(0, LIST_OF_FIGURES.length - 1)];
+        let nextView = LIST_VIEWS[this.randomInteger(0, LIST_VIEWS.length - 1)];
+
         let mainPoint = {x: START_X_COORD, y: START_Y_COORD};
+
         let views = typeOfFigure.views;
         let coords = this.getCoords(mainPoint, views[currentView]);
 
@@ -66,7 +76,10 @@ export class helperService {
             coordsToCheck: typeOfFigure.cordsToCheck,
             mainPoint: mainPoint,
             views: views,
-            currentView: currentView
+            currentView: currentView,
+            nextView: nextView,
+            nextTypeOfFigure: nextTypeOfFigure,
+            viewNextFigure: nextTypeOfFigure.views[nextView]
         };
 
         return figure;
