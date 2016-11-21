@@ -105,7 +105,6 @@ export class helperService {
                 isActionPossible = state.isMoveNext;
                 break;
             case CHECK_BOTTOM:
-                state.isMoveNext = false;
                 let _currentView = figure.views[figure.currentView];
                 let _coords = this.getCoords(figure.mainPoint, _currentView);
 
@@ -118,9 +117,15 @@ export class helperService {
                 break;
             case CHECK_LEFT:
                 isActionPossible = coordsToCheck.every(i => coords[i].y < LEFT_TOP_LIMIT || coords[i].x > LEFT_TOP_LIMIT && !field[coords[i].y][coords[i].x + LEFT_OFFSET]);
+                if (!state.isMoveNext) {
+                    isActionPossible = false;
+                }
                 break;
             case CHECK_RIGHT:
                 isActionPossible = coordsToCheck.every(i => coords[i].y < LEFT_TOP_LIMIT || coords[i].x < RIGHT_LIMIT && !field[coords[i].y][coords[i].x + RIGHT_OFFSET]);
+                if (!state.isMoveNext) {
+                    isActionPossible = false;
+                }
                 break;
         }
 
@@ -141,7 +146,7 @@ export class helperService {
             this.renderCoordsInView(figure.coords).forEach(e => field[e.y][e.x] = true );
         }
 
-        if (!state.isMoveNext) {
+        if (!state.isMoveNext || state.isMoveNext && action === CHECK_BOTTOM) {
             [state.field, state.exp] = this.clearFullRowsCntrolResults(field, exp);
         }
 
