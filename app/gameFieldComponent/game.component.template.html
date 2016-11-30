@@ -1,9 +1,21 @@
-<div class="rowCollection" *ngFor="let row of gameStore.field">
-    <div class="colCollection" *ngFor="let col of row" [class.colWithFigure]="col"></div>
+<div class="game_field">
+    <div class="row" *ngFor="let row of gameStore.field">
+        <div class="col" *ngFor="let col of row" [class.colWithFigure]="col"></div>
+    </div>
+</div>
+<div class="info_field">
+    <div class="next_figure_field">
+        <div class="row" *ngFor="let row of nextFigureField">
+            <div class="col" *ngFor="let col of row" [class.colWithFigure]="col"></div>
+        </div>
+    </div>
+    <div class="info">
+        <div class="value_info">{{gameStore.exp.level}}</div>
+        <div class="label_info">LEVEL</div>
+    </div>
+    <div class="info">
+        <div class="value_info">{{gameStore.exp.exp}}</div>
+        <div class="label_info">SCORE</div>
+    </div>
 </div>
 <button-component *ngIf="isStarted" [title]="endGame"></button-component>
-{{gameStore.exp.exp}} || {{gameStore.exp.level}}<br/>
-
-<div class="rowCollectionNext" *ngFor="let row of nextFigureField">
-    <div class="colCollectionNext" *ngFor="let col of row" [class.colWithFigure]="col"></div>
-</div>

@@ -1,36 +1,89 @@
-.colCollection {
-    float: left;
-    width: 10%;
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: Roboto;
+}
+h1 {
     text-align: center;
-    height: 40px;
-    line-height: 40px;
+    margin: 1vw 0 1vw 0;
+    font-size: 2vw;
+}
+button {
+    display: inline-block;
+    text-align: center;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-appearance: none;
+    transition: background-color .25s ease-out,color .25s ease-out;
+    vertical-align: middle;
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 0;
+    padding: .85em 1em;
+    margin: 0px;
+    font-size: 1vw;
+    background-color: rgb(33, 153, 232);
+    color: rgb(254, 254, 254);
+}
+button.expanded {
+    display: block;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+/**/
+.container {
+    width: 32vw;
+    margin: 0px auto;
+    display: flex;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+.game_field {
+    width: 20vw;
+    height: 40vw;
+    margin: 1vw;
+    margin-top: 0px;
+    float: left;
+}
+.col {
     box-sizing: border-box;
+    float: left;
+    width: 2vw;
+    height: 2vw;
     border-right: 1px solid rgb(128, 128, 128);
     border-bottom: 1px solid rgb(128, 128, 128);
 }
-.colCollection:nth-child(1) {
+.col:nth-child(1) {
     border-left: 1px solid rgb(128, 128, 128);
 }
-.rowCollection:nth-child(1) .colCollection {
+.row:nth-child(1) .col {
     border-top: 1px solid rgb(128, 128, 128);
+}
+.info_field {
+    width: 10vw;
+    float: left;
+}
+.next_figure_field {
+    width: 8vw;
+    height: 8vw;
+    border: 1px solid #fff;
+    margin: 1vw;
+    margin-top: 0px;
+}
+.info {
+    margin: 1vw;
+    font-weight: bold;
+    font-size: 1.5vw;
+    padding-left: 0px;
+    text-align: center;
+}
+.value_info {
+    font-weight: bold;
+    font-size: 1.5vw;
+}
+.label_info {
+    font-weight: bold;
+    font-size: 1vw;
 }
 .colWithFigure {
-    background-color: #000;
-}
-.colCollectionNext:nth-child(1) {
-    border-left: 1px solid rgb(128, 128, 128);
-}
-.rowCollectionNext:nth-child(1) .colCollection {
-    border-top: 1px solid rgb(128, 128, 128);
-}
-
-.colCollectionNext {
-    float: left;
-    width: 25%;
-    text-align: center;
-    height: 40px;
-    line-height: 40px;
-    box-sizing: border-box;
-    border-right: 1px solid rgb(128, 128, 128);
-    border-bottom: 1px solid rgb(128, 128, 128);
+    background: #000;
 }

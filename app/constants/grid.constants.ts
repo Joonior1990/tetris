@@ -4,7 +4,7 @@ export const COL_COUNT = 10;
 
 // default game's speed
 export const START_SPEED = 800;
-export const K_SPEED = 70;
+export const K_SPEED = 90;
 
 // field limit/block constants
 export const LEFT_TOP_LIMIT = 0;
