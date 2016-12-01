@@ -15,7 +15,8 @@ export class helperService {
                 exp: 0,
                 range: [0, 1, 2, 3, 6, 10, 15, 21, 28, 36],
                 multiplier: MULTIPLIER,
-                expByCountsOfRows: [0, 1, 2.4, 4, 6]
+                expByCountsOfRows: [0, 1, 2.4, 4, 6],
+                countRemovedRows: 0
             },
             speed: START_SPEED
 
@@ -46,6 +47,7 @@ export class helperService {
 
         // count exp
         if (count) {
+            exp.countRemovedRows += count;
             exp.exp += exp.expByCountsOfRows[count] * exp.multiplier;
             if (exp.exp >= exp.range[exp.level] * Math.pow(exp.multiplier, 2)) {
                 exp.level++;

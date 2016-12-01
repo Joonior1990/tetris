@@ -17,5 +17,9 @@
         <div class="value_info">{{gameStore.exp.exp}}</div>
         <div class="label_info">SCORE</div>
     </div>
+    <div class="info">
+        <div class="value_info">{{gameStore.exp.countRemovedRows}}</div>
+        <div class="label_info">LINES</div>
+    </div>
 </div>
 <button-component *ngIf="isStarted" [title]="endGame"></button-component>
