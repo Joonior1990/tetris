@@ -28,7 +28,7 @@ export class helperService {
         return new Array(countOfRow).fill('').map(e => new Array(countOfCol).fill('').map(e => false));
     }
 
-    clearFullRowsCntrolResults(field, exp) {
+    clearFullRowsControlResults(field, exp) {
         let newField = field.slice();
         let startIndex = ROW_COUNT - 1;
 
@@ -161,7 +161,7 @@ export class helperService {
         }
 
         if (!state.isMoveNext || state.isMoveNext && action === CHECK_BOTTOM) {
-            [state.field, state.exp] = this.clearFullRowsCntrolResults(field, exp);
+            [state.field, state.exp] = this.clearFullRowsControlResults(field, exp);
             state.speed = START_SPEED - K_SPEED * state.exp.level;
         }
 
