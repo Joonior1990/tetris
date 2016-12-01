@@ -10,6 +10,10 @@ export class gameService {
 
         this.store.select('isGameStarted').subscribe(e => {
             this.isStarted = e;
+
+            if (!this.isStarted) {
+                clearTimeout(this.timer);
+            }
         });
 
         this.store.select('gameReducer').subscribe(e => {
@@ -19,6 +23,7 @@ export class gameService {
 
     private isStarted;
     private gameData;
+    private timer;
 
     compliteFieldWithNextFigure(nextFigure, startPosition, countOfRow, countOfCol) {
         let nextFigureField = new Array(countOfRow).fill('').map(e => new Array(countOfCol).fill('').map(e => false));
@@ -37,7 +42,7 @@ export class gameService {
     moveDown() {
         if (this.isStarted) {
             this.store.dispatch({ type: MOVE_DOWN });
-            setTimeout(() => {
+            this.timer = setTimeout(() => {
                 if (this.gameData.isMoveNext) {
                     this.moveDown();
                 } else {
