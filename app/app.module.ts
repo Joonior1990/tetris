@@ -10,6 +10,7 @@ import { GameComponent } from './gameFieldComponent/game.component';
 
 // common Components
 import { ButtonComponent } from './commonComponent/buttonComponent/button.component';
+import { PopupComponent } from './commonComponent/popupComponent/popup.component';
 
 // service
 import { gameService, helperService } from './services/index';
@@ -29,7 +30,8 @@ import { gameService, helperService } from './services/index';
     declarations: [
         AppComponent,
         GameComponent,
-        ButtonComponent
+        ButtonComponent,
+        PopupComponent
     ],
     providers: [
         gameService,

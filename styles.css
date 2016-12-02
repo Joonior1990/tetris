@@ -87,3 +87,57 @@ button.expanded {
 .colWithFigure {
     background: #000;
 }
+
+/**/
+.reveal-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1005;
+    background-color: rgba(10, 10, 10, 0.45);
+    overflow-y: scroll;
+}
+
+.close-button {
+    position: absolute;
+    color: rgb(138, 138, 138);
+    right: 0px;
+    top: -20px;
+    font-size: 2em;
+    line-height: 1;
+    cursor: pointer;
+    background-color: rgb(255, 255, 255);
+    width: 10px;
+    height: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #000;
+}
+
+.reveal {
+    z-index: 1006;
+    border: 1px solid rgb(202, 202, 202);
+    background-color: rgb(254, 254, 254);
+    border-radius: 0;
+    position: relative;
+    top: 100px;
+    left: 0.5vw;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-y: auto;
+    width: 30vw;
+}
+
+.reveal .expanded {
+    width: 50%;
+    float: left;
+}
+
+.expanded:hover {
+    background-color: rgb(23, 133, 212);
+}

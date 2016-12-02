@@ -51,7 +51,7 @@ export class gameService {
                         this.store.dispatch({ type: CREATE_NEW_FIGURE });
                         this.moveDown();
                     } else {
-                        alert(GAME_OVER);
+                        this.gameData.isGameOver = true;
                     }
                 }
             }, this.gameData.speed)

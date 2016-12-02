@@ -23,3 +23,4 @@
     </div>
 </div>
 <button-component *ngIf="isStarted" [title]="endGame"></button-component>
+<popup *ngIf="this.gameStore.isGameOver" (isStartNewGame)="gameHandler($event)"></popup>

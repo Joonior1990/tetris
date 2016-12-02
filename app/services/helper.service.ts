@@ -10,6 +10,7 @@ export class helperService {
             figure: this.createNewFigure({}),
             isMoveNext: true,
             isFieldUpdate: true,
+            isGameOver: false,
             exp: {
                 level: 1,
                 exp: 0,

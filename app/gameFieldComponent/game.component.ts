@@ -38,6 +38,13 @@ export class GameComponent {
     private endGame: string = END_GAME;
     private subscribers: Array<any> = [];
 
+    gameHandler(isStartNewGame) {
+        if (isStartNewGame) {
+            this.gameService.startGame();
+        }
+        this.gameStore.isGameOver = false;
+    }
+
     ngOnInit() {
         this.gameService.startGame();
     }
