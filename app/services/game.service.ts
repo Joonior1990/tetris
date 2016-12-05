@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MOVE_LEFT, MOVE_RIGHT, ROTATE_FIGURE, MOVE_BOTTOM, INIT_FIELD, MOVE_DOWN, START_SPEED, CLEAR_FIGURE_POSITION, CREATE_NEW_FIGURE } from '../constants/index';
 import { StartStateInterface } from '../interfaces/index';
-import {GAME_OVER} from "../constants/message.cconstants";
 
 @Injectable()
 export class gameService {
