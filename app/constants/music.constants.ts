@@ -4,4 +4,4 @@ const TETRIS_SOUND_URL = `https://drive.google.com/uc?id=0Bx-u_84bvD-SMXNXR0Q2eE
 export const SOUND_BANK = [
     {URL: TETRIS_SOUND_URL},
     {URL: EXTRA_SOUND_URL}
-]
+];
